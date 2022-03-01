@@ -21,6 +21,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
 
 }
