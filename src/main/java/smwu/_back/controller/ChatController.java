@@ -20,7 +20,6 @@ public class ChatController {
 
     private final ChatRepository chatRepository;
     private final ChatContentRepository chatContentRepository;
-    //    private final LoginRepository loginRepository;
     private final FindUserRepository findUserRepository;
 
 
