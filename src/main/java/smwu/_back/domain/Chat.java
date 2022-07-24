@@ -22,7 +22,7 @@ public class Chat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "KEYPID", nullable = false)
     @JsonIgnore
-    private UserInfoVO user;
+    private User user;
 
     @Column(nullable = false)
     private String receiver_id;

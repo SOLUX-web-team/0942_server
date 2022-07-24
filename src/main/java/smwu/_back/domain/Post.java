@@ -24,7 +24,7 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "KEYPID", nullable = false)
     @JsonIgnore
-    private UserInfoVO user;
+    private User user;
 
     @Column(nullable = false, length = 50)
     private String title;
@@ -60,7 +60,7 @@ public class Post {
     private String post_addr;
 
     //==생성 메서드==//
-    public static Post createPost(UserInfoVO user, String title, String category, Integer invite_num,
+    public static Post createPost(User user, String title, String category, Integer invite_num,
                                   Integer scrap_num, String content, String place, Integer cost, String post_addr) {
         Post post = new Post();
         post.setUser(user);
