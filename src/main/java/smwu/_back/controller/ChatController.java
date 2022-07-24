@@ -1,6 +1,8 @@
 package smwu._back.controller;
 
         import lombok.RequiredArgsConstructor;
+        import org.springframework.messaging.handler.annotation.MessageMapping;
+        import org.springframework.messaging.handler.annotation.SendTo;
         import org.springframework.web.bind.annotation.*;
         import smwu._back.domain.Chat;
         import smwu._back.domain.ChatContent;
@@ -8,7 +10,7 @@ package smwu._back.controller;
         import smwu._back.repository.ChatRepository;
 //        import smwu._back.chat.service.ChatService;
         import smwu._back.repository.FindUserRepository;
-        import smwu._back.domain.UserInfoVO;
+        import smwu._back.domain.User;
 
         import java.time.LocalDateTime;
         import java.util.*;
@@ -22,6 +24,9 @@ public class ChatController {
     private final ChatContentRepository chatContentRepository;
     private final FindUserRepository findUserRepository;
 
+    @MessageMapping("/chat")
+    @SendTo("")
+
 
     //번호 : [{ "who":"me"/"you", "time":time, "message":message }]
     @CrossOrigin(origins = "http://localhost:3000")
@@ -33,10 +38,10 @@ public class ChatController {
 
         String SENDER_ID =userinfo.get("SENDER_ID").toString();
         System.out.println(SENDER_ID);
-        UserInfoVO me = findUserRepository.finduserWithID(SENDER_ID);
+        User me = findUserRepository.finduserWithID(SENDER_ID);
         System.out.println(me);
         String RECEIVER_ID =userinfo.get("RECEIVER_ID").toString();
-        UserInfoVO receiver = findUserRepository.finduserWithID(RECEIVER_ID);
+        User receiver = findUserRepository.finduserWithID(RECEIVER_ID);
 
         LinkedHashMap<Integer, HashMap<String,String> > messages = new LinkedHashMap<>();
 
@@ -100,8 +105,8 @@ public class ChatController {
         if(findUserRepository.finduserWithID(INPUT_ID)==null) {
             System.out.println("null");
         }
-        UserInfoVO me = findUserRepository.finduserWithID(INPUT_ID);
-        UserInfoVO receiver = findUserRepository.finduserWithID(RECEIVER_ID);
+        User me = findUserRepository.finduserWithID(INPUT_ID);
+        User receiver = findUserRepository.finduserWithID(RECEIVER_ID);
         if(me==null){
             System.out.println("no id");
         }
@@ -161,7 +166,7 @@ public class ChatController {
             return noInfofromFront;
         }
 
-        UserInfoVO me = findUserRepository.finduserWithID(userinfo.get("MY_ID").toString());
+        User me = findUserRepository.finduserWithID(userinfo.get("MY_ID").toString());
         List<Chat> myAllChat = chatRepository.getAllChatListwithKEY(me.getKeypid());
         System.out.println("myAllchat:"+myAllChat);
 

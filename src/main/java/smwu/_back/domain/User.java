@@ -1,10 +1,13 @@
 package smwu._back.domain;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import smwu._back.domain.Scrap;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -13,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "Users")
-public class UserInfoVO {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +24,10 @@ public class UserInfoVO {
 
     @Column(nullable = false, unique = true, length = 30)
     private String id;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
 
     @Column(nullable = false, length = 30)
     private String pw;
@@ -46,7 +53,7 @@ public class UserInfoVO {
     @Column
     private Integer user_count;
 
-    public UserInfoVO(String id, String pw, String email, String phone, String addr){
+    public User(String id, String pw, String email, String phone, String addr){
 
         this.id=id;
         this.pw=pw;
@@ -56,54 +63,39 @@ public class UserInfoVO {
     }
 
 
-    //getter setter
-
-    public Integer getKey() {
-        return keypid;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
-    public void setKey(Integer keypid) {
-        this.keypid = keypid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddr() {
-        return addr;
-    }
-
-    public void setAddr(String addr) {
-        this.addr = addr;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPw() {
+    @Override
+    public String getPassword() {
         return pw;
     }
 
-    public void setPw(String pw) {
-        this.pw = pw;
+    @Override
+    public String getUsername() {
+        return id;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 

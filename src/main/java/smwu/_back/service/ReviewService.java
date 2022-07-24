@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import smwu._back.domain.Review;
 import smwu._back.dto.ReviewUserDto;
 import smwu._back.repository.ReviewRepository;
-import smwu._back.domain.UserInfoVO;
+import smwu._back.domain.User;
 import smwu._back.repository.RegisterRepository;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     public void saveReview(String userId, Map<Object, String> reviewInfo) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return;
 
         Integer score = Integer.parseInt(reviewInfo.get("REVIEW_SCORE"));
@@ -49,23 +49,23 @@ public class ReviewService {
     }
 
     public List<Review> getReview(String userId) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return null;
 
         return reviewRepository.findReview(user);
     }
 
     public ReviewUserDto getUserInfo(String userId) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return null;
 
         return ReviewUserDto.builder().user_count(user.getUser_count()).user_score(user.getUser_score()).build();
     }
 
     //==유저 찾기==//
-    private UserInfoVO findUser(String userId) {
-        List<UserInfoVO> users = registerRepository.listUserinfoWithID(userId);
-        UserInfoVO user;
+    private User findUser(String userId) {
+        List<User> users = registerRepository.listUserinfoWithID(userId);
+        User user;
         try {
             user = users.get(0);
         } catch (IndexOutOfBoundsException e) {

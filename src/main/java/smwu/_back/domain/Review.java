@@ -23,7 +23,7 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "KEYPID", nullable = false)
     @JsonIgnore
-    private UserInfoVO user;
+    private User user;
 
     @Column(nullable = false)
     private Integer review_score;

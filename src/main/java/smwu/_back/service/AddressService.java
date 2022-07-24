@@ -3,7 +3,7 @@ package smwu._back.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import smwu._back.domain.UserInfoVO;
+import smwu._back.domain.User;
 import smwu._back.repository.RegisterRepository;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class AddressService {
     private final RegisterRepository registerRepository;
 
     public void saveCurrentAddress(String userId, String address) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return;
 
         if (address != null) {
@@ -25,7 +25,7 @@ public class AddressService {
     }
 
     public boolean certifyAddress(String userId, String addressInfo) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return false;
 
         String currentAddr = user.getCurrent_addr();
@@ -45,9 +45,9 @@ public class AddressService {
     }
 
     //==유저 찾기==//
-    private UserInfoVO findUser(String userId) {
-        List<UserInfoVO> users = registerRepository.listUserinfoWithID(userId);
-        UserInfoVO user;
+    private User findUser(String userId) {
+        List<User> users = registerRepository.listUserinfoWithID(userId);
+        User user;
         try {
             user = users.get(0);
         } catch (IndexOutOfBoundsException e) {

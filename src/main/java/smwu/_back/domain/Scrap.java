@@ -18,7 +18,7 @@ public class Scrap {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "KEYPID", nullable = false)
-    private UserInfoVO user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POST_KEY", nullable = false)

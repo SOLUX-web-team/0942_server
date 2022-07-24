@@ -9,7 +9,7 @@ import smwu._back.domain.Scrap;
 import smwu._back.repository.PostRepository;
 import smwu._back.repository.ScrapRepository;
 import smwu._back.repository.RegisterRepository;
-import smwu._back.domain.UserInfoVO;
+import smwu._back.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ScrapService {
     private final PostService postService;
 
     public Integer saveScrap(String userId, Long postId) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return 0;
 
         Post post = postRepository.findOne(postId);
@@ -52,7 +52,7 @@ public class ScrapService {
 
 
     public Integer isScrapped(String userId, Long postId) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return 0;
 
         Post post = postRepository.findOne(postId);
@@ -62,7 +62,7 @@ public class ScrapService {
     }
 
     public List<PostDto> getScrapped(String userId) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return null;
 
         List<Scrap> scraps = user.getScraps();
@@ -74,9 +74,9 @@ public class ScrapService {
     }
 
     //==유저 찾기==//
-    private UserInfoVO findUser(String userId) {
-        List<UserInfoVO> users = registerRepository.listUserinfoWithID(userId);
-        UserInfoVO user;
+    private User findUser(String userId) {
+        List<User> users = registerRepository.listUserinfoWithID(userId);
+        User user;
         try {
             user = users.get(0);
         } catch (IndexOutOfBoundsException e) {

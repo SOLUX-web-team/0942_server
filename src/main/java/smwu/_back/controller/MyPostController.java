@@ -8,7 +8,7 @@ import smwu._back.dto.PostDto;
 import smwu._back.repository.MyPostRepository;
 import smwu._back.service.PostService;
 import smwu._back.service.S3Service;
-import smwu._back.domain.UserInfoVO;
+import smwu._back.domain.User;
 import smwu._back.repository.FindUserRepository;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class MyPostController {
     @PostMapping("/mypage/postlist")
     public List<PostDto> sendMypostList(@RequestBody Map<Object, String> userinfo){
         System.out.println(userinfo.get("MY_ID"));
-        UserInfoVO me =findUserRepository.finduserWithID(userinfo.get("MY_ID"));
+        User me =findUserRepository.finduserWithID(userinfo.get("MY_ID"));
 
         LinkedList<Post> myposts = myPostRepository.getMyAllPosts(me.getKeypid());
 //        List<Post> mypostsforList =myPostRepository.getMyAllPostsForList(me.getKeypid());

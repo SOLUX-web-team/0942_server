@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import smwu._back.domain.Post;
 import smwu._back.domain.Scrap;
-import smwu._back.domain.UserInfoVO;
+import smwu._back.domain.User;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -23,7 +23,7 @@ public class ScrapRepository {
         return em.find(Scrap.class, scrapId);
     }
 
-    public List<Scrap> findScrap(UserInfoVO user, Post post) {
+    public List<Scrap> findScrap(User user, Post post) {
         return em.createQuery("select s from scraps s where s.user = :user and s.post = :post", Scrap.class)
                 .setParameter("user", user)
                 .setParameter("post", post)

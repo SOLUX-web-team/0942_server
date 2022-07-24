@@ -10,7 +10,7 @@ import smwu._back.dto.PostDto;
 import smwu._back.repository.ImageRepository;
 import smwu._back.repository.PostRepository;
 import smwu._back.repository.RegisterRepository;
-import smwu._back.domain.UserInfoVO;
+import smwu._back.domain.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class PostService {
 
     public PostDto upload(Map<Object, String> postInfo, List<String> files) {
         String userId = postInfo.get("USER_ID");
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null) return null;
 
         String title = postInfo.get("POST_TITLE");
@@ -88,7 +88,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostDto> getPosts(String userId, String address) {
-        UserInfoVO user = findUser(userId);
+        User user = findUser(userId);
         if (user == null || !user.getCurrent_addr().equals(address)) {
             List<Post> all = postRepository.findPosts(address);
             System.out.println("user == null " + address);
@@ -244,9 +244,9 @@ public class PostService {
     }
 
     //==유저 찾기==//
-    private UserInfoVO findUser(String userId) {
-        List<UserInfoVO> users = registerRepository.listUserinfoWithID(userId);
-        UserInfoVO user;
+    private User findUser(String userId) {
+        List<User> users = registerRepository.listUserinfoWithID(userId);
+        User user;
         try {
             user = users.get(0);
         } catch (IndexOutOfBoundsException e) {

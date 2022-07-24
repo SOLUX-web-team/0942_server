@@ -1,10 +1,13 @@
 package smwu._back.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import smwu._back.repository.RegisterRepository;
-import smwu._back.domain.UserInfoVO;
+import smwu._back.domain.User;
+import smwu._back.utils.JwtTokenProvider;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -13,10 +16,11 @@ import java.util.Map;
 public class RegiController {
 
     private final RegisterRepository registerRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(value = "/register/post")
-//    public @ResponseBody String registerUser (@RequestParam("USER_PW") String id,@RequestParam("") String email, @RequestParam String password, @RequestParam String phone, @RequestParam String addr ){
     public @ResponseBody String registerUser (@RequestBody Map<Object, String> userinfo){
         String id = userinfo.get("USER_ID").toString();
         String password = userinfo.get("USER_PW").toString();
@@ -26,14 +30,12 @@ public class RegiController {
 
         System.out.println(id+password+addr+phone+email);
 
-
-
         //id가 같은 사용자 존재 여부 확인
-        List<UserInfoVO> existIdLists = registerRepository.listUserinfoWithID(id);
-        List<UserInfoVO> existEamilLists = registerRepository.listUserinfoWithEMAIL(email);
-        List<UserInfoVO> existPhoneLists = registerRepository.listUserinfoWithPHONE(phone);
+        List<User> existIdLists = registerRepository.listUserinfoWithID(id);
+        List<User> existEamilLists = registerRepository.listUserinfoWithEMAIL(email);
+        List<User> existPhoneLists = registerRepository.listUserinfoWithPHONE(phone);
 
-            Iterable<UserInfoVO> users=registerRepository.findAll(); //전체 유저 가져오기
+            Iterable<User> users=registerRepository.findAll(); //전체 유저 가져오기
             users.forEach(item -> System.out.println(item.getId()+" "+item.getEmail()));
 
         if(existIdLists.size() !=0){
@@ -51,20 +53,19 @@ public class RegiController {
             return "phone already exist!";
         }
 
-            System.out.println("ok");
-            final UserInfoVO user=UserInfoVO.builder().id(id).pw(password).email(email).phone(phone).addr(addr).build();
-            registerRepository.save(user);
+        System.out.println("ok");
+        final User user=
+                User.builder()
+                .id(id)
+                .pw(passwordEncoder.encode(password))
+                .email(email)
+                .phone(phone)
+                .addr(addr)
+                .roles(Collections.singletonList("ROLE_USER"))
+                .build();
+        registerRepository.save(user);
 
-//            Iterable<UserInfoVO> users=registerRepository.findAll(); //전체 유저 가져오기
-//            users.forEach(item -> System.out.println(item.getId()+" "+item.getEmail()));
-            return "saved!";
+        return "saved! userid:"+user.getUsername();
 
-    }
-
-    @CrossOrigin(origins = "http://localhost:3000")
-    @ResponseBody
-    @RequestMapping(value = "/register/get", method = RequestMethod.GET)
-    public String test1(){
-        return "ddddd";
     }
 }
